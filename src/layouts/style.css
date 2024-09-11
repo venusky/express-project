@@ -1,0 +1,27 @@
+header {
+    height: 60px; /* Hauteur du header */
+    background-color: #f8f9fa;
+    display: flex;
+    align-items: center; /* Centrer verticalement */
+    justify-content: center; /* Centrer horizontalement */
+}
+
+main {
+    min-height: calc(100vh - 120px); /* Hauteur de la page moins la hauteur du header et du footer */
+    padding: 20px; /* Espacement interne */
+    box-sizing: border-box;
+}
+
+footer {
+    height: 60px; /* Hauteur du footer */
+    background-color: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}

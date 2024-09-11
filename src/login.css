@@ -1,0 +1,109 @@
+body {
+    font-family: "Inter", sans-serif;
+    background-color: #edf2fa;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .login-container {
+    background: #000;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    width: 500px;
+    text-align: center;
+  }
+  
+  .login-container img.logo {
+    width: 100px;
+    margin-bottom: 20px;
+  }
+  
+  .login-container h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #fff;
+    text-transform: uppercase;
+  }
+  
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .flag-icon {
+    position: absolute;
+    left: 10px;
+    width: 20px;
+    height: 14px;
+  }
+  
+  .login-input {
+    padding: 12px 12px 12px 40px;
+    font-size: 16px;
+    border: 1px solid #555;
+    border-radius: 8px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #333;
+    color: #fff;
+  }
+  
+  .login-input:focus {
+    border-color: none;
+    outline: none;
+  }
+  
+  .login-button {
+    padding: 12px;
+    font-size: 16px;
+    color: #000;
+    background-color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    font-weight: bold;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .login-button:hover {
+    background-color: #ddd;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+  }
+  
+  .forgot-password {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  
+  .forgot-password:hover {
+    color: #ccc;
+  }
+  
+  .login-footer {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #aaa;
+  }
+  .error-message{
+    color: red;
+  }
+  

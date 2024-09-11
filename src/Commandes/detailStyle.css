@@ -1,0 +1,252 @@
+Background color for the entire page
+.detail-commande {
+  }
+  
+  /* Table headers background color */
+  table th {
+    background-color: #EFF8FF; /* Lighter blue background for table headers */
+    padding: 10px; /* Optional: add some padding to headers */
+    text-align: left; /* Optional: align text to the left */
+  }
+  
+  /* Additional styling to make the tables look better */
+  table {
+    width: 100%;
+    border-collapse: collapse; /* Collapse borders for a cleaner look */
+  }
+  
+
+  
+  td {
+    padding: 10px; /* Padding for table cells */
+  }
+  
+  /* Header styling */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .header-left {
+    display: flex;
+    align-items: center;
+  }
+  
+  .badge {
+    background-color: #007bff; /* Example badge background color */
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+  
+  .columns {
+    display: flex;
+  }
+  
+
+  
+  .section-header {
+    font-weight: bold;
+  }
+  
+  /* Photo section styling */
+  .photo-column {
+  }
+  
+  .photo-container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px; /* Optional: rounded corners for the image */
+  }
+
+  .status-buttons {
+    display: flex;
+    gap: 10px;
+  }
+
+
+
+  .status-buttons {
+    display: flex;
+    gap: 10px;
+  }
+
+  .status-button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+
+  .status-button:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+  }
+
+  .status-button.en-attente {
+    background-color: #ffd700;
+    color: black;
+  }
+
+  .status-button.en-cours {
+    background-color: #007bff;
+  }
+
+  .status-button.livre {
+    background-color: #28a745;
+  }
+
+  .status-button.annuler {
+    background-color: #dc3545;
+  }
+
+  .modify-button {
+    padding: 8px 16px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+
+
+
+  .status-button.active {
+    border: 2px solid #333;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  }
+
+  
+  .status-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .status-instructions {
+    font-size: 14px;
+    color: #ffffff;
+    margin-right: 10px;
+  }
+  
+
+
+
+  .detail-commande {
+    width: 100%; /* Ensure full width */
+    margin: 0; /* Remove default margins */
+  }
+  
+  table {
+    width: 100%; /* Ensure tables take full width */
+    border-collapse: collapse; /* Collapse borders for a cleaner look */
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%; /* Ensure header takes full width */
+  }
+  
+  .header-left {
+    display: flex;
+    align-items: center;
+  }
+  
+  .badge {
+    background-color: #007bff; /* Example badge background color */
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+  
+  .columns {
+    display: flex;
+    flex-wrap: wrap; /* Allow columns to wrap to the next line */
+  }
+  
+  .column {
+    flex: 1; /* Ensure columns take available space */
+  }
+  
+  .section-header {
+    font-weight: bold;
+  }
+  
+  /* Photo section styling */
+  .photo-column {
+    flex: 1;
+  }
+  
+  .photo-container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px; /* Optional: rounded corners for the image */
+  }
+  
+  .status-buttons {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .status-button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .status-button.en-attente {
+    background-color: #ffd700;
+    color: black;
+  }
+  
+  .status-button.en-cours {
+    background-color: #007bff;
+  }
+  
+  .status-button.livre {
+    background-color: #28a745;
+  }
+  
+  .status-button.annuler {
+    background-color: #dc3545;
+  }
+  
+  .modify-button {
+    padding: 8px 16px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .status-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .status-instructions {
+    font-size: 14px;
+    color: #ffffff;
+    margin-right: 10px;
+  }
+  

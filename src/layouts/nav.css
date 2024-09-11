@@ -1,0 +1,74 @@
+.navbar {
+    width: 100%;
+    padding: 10px 60px;
+    background: #3b5998;
+    color: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.navbar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.navbar-logo img {
+    height: 40px;
+}
+
+.express {
+    font-family: "Inter", sans-serif;
+    color: white;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.navbar-links-container {
+    flex-grow: 1; /* Makes this container take up available space */
+    display: flex;
+    justify-content: center; /* Centers items within this container */
+}
+
+.navbar-links {
+    
+    display: flex;
+    gap: 20px;
+    list-style: none;
+    color: #fff !important;
+}
+
+.navbar-link a   {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.navbar-link:hover {
+    color: #ddd;
+}
+
+.wallet-balance-container {
+    display: flex;
+    align-items: center;
+}
+
+.wallet-balance-label {
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.wallet-balance {
+    background-color: #000;
+    color: #fff;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-weight: bold;
+}

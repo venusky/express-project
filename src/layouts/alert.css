@@ -1,0 +1,50 @@
+.custom-ui {
+    background-color: #f4f4f4;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    width: 500px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.custom-ui h1 {
+    margin-top: 0;
+    font-size: 24px;
+    color: #333;
+}
+
+.custom-ui p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.custom-buttons {
+    display: flex;
+    justify-content: space-around;
+}
+
+.confirm-button {
+    background-color: #3085d6;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.cancel-button {
+    background-color: #ffd700;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.confirm-button:hover {
+    background-color: #2874c4;
+}
+
+.cancel-button:hover {
+    background-color: #ffb703;
+}

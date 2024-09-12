@@ -66,7 +66,8 @@ function ListCommandes() {
     }, [startDate, endDate]); // Add startDate and endDate as dependencies
 
     const handleSearchChangeNum = (event) => {
-        setSearchQueryNum(event.target.value);
+        const value = event.target.value;
+        setSearchQueryNum(value);
     };
 
     const handleSearchChangeTel = (event) => {
@@ -78,6 +79,7 @@ function ListCommandes() {
     const handleSearchChangeStatus = (event) => {
         setSearchQueryStatus(event.target.value.toLowerCase());
     };
+
 
     const filterCommandes = (commandes) => {
         return commandes.filter(commande => {
@@ -98,7 +100,7 @@ function ListCommandes() {
                     addressName.includes(searchQueryAddress)
 
                 ) &&
-                (searchQueryStatus === '' || status.includes(searchQueryStatus)) &&
+                (searchQueryStatus === '' || searchQueryStatus === 'global' || status.includes(searchQueryStatus)) &&
                 (searchQueryNum === '' || commande.uuid.includes(searchQueryNum)) &&
                 (isNaN(start.getTime()) || createdDate >= start) &&
                 (isNaN(end.getTime()) || createdDate <= end)
@@ -157,6 +159,7 @@ function ListCommandes() {
                             onChange={handleSearchChangeStatus}
                         >
                             <option value="" disabled> Status </option>
+                            <option value="global"> Tout </option>
                             <option value="inprocess">En cours</option>
                             <option value="delivered">Livrée</option>
                             <option value="pending">En attente</option>
@@ -200,7 +203,7 @@ function ListCommandes() {
                 <Tabs
                     defaultActiveKey="list-commandes"
                     id="uncontrolled-tab-example"
-                    className="mb-3"
+                    className="mb-3 justify-content-center"
                 >
                     <Tab eventKey="commandes-en-attente"
                          title={`Commandes en attente (${filteredpenddingCommandes.length})`}>

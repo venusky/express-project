@@ -1,6 +1,9 @@
 import React, { useState, CSSProperties } from 'react';
 import axios from 'axios';
 import {BeatLoader} from "react-spinners";
+import {citizen} from "../utils/cities";
+import Swal from "sweetalert2";
+import {useNavigate} from "react-router-dom";
 
 
 const override: CSSProperties = {
@@ -26,6 +29,7 @@ const formatDateForInput = (date) => {
 };
 
 const AddCommande = () => {
+    const navigate = useNavigate();
     let color="#007BFF";
     const today = new Date();
     const todayFormatted = formatDate(today); // For display purposes
@@ -113,11 +117,32 @@ const AddCommande = () => {
                     'Authorization': `Bearer ${token}` // Replace with your actual token
                 },
             });
+            await Swal.fire({
+                toast: true,
+                position: "top-end",
+                icon: "success",
+                title: 'Commande ajoutée avec succès !',
+                showConfirmButton: false,
+                backdrop: false,
+                timer: 1500
+            });
 
-            alert('Commande ajoutée avec succès !');
+            navigate('/liste-commandes')
+
+            //alert('Commande ajoutée avec succès !');
         } catch (error) {
             console.error('Erreur lors de l\'ajout de la commande:', error);
-            alert('Erreur lors de l\'ajout de la commande. Veuillez réessayer.');
+
+            await Swal.fire({
+                toast: true,
+                position: "top-end",
+                icon: "error",
+                title: error.response.data?.message,
+                showConfirmButton: false,
+                backdrop: false,
+                timer: 1500
+            });
+            //alert('Erreur lors de l\'ajout de la commande. Veuillez réessayer.');
         } finally {
             setLoading(false); // Stop loading
         }
@@ -176,7 +201,17 @@ const AddCommande = () => {
     };
 
     return (
-        <div style={{marginTop: '23%', padding: "30px"}}>
+        <div style={{
+            position: 'relative',
+            marginTop: 'calc(17vh)',
+            padding: "30px",
+            height: 'calc(100vh - 30px)',
+            width: '100vw',
+            marginLeft: 'calc(-50vw + 50%)',
+            marginRight: 'calc(-50vw + 50%)',
+            overflow: 'visible',
+            boxSizing: 'border-box'
+        }}>
             <div className="header">
                 <div className="header-left">
                     <h1>Nouvelle Commande</h1>
@@ -185,227 +220,464 @@ const AddCommande = () => {
                     {loading ? 'Création en cours...' : 'Créer la commande'}
                 </button>
             </div>
-            <div className="legend mt-4 mb-4">
-                Les champs marqués d'un <span style={{color: 'red'}}>*</span> sont obligatoires.
+            <div className="legend mt-4 mb-4 d-flex justify-content-center">
+                Les champs marqués d'un <span style={{color: 'red', marginLeft:'2px', marginRight:'2px'}}>*</span> sont obligatoires.
             </div>
-            <div className="columns">
-                <div className="column">
-                    <div className="section-header">Informations Générales</div>
-                    <table>
-                        <tbody>
-                        <tr>
-                            <th># Numéro</th>
-                            <td><input type="text" placeholder='Automatique' disabled/></td>
-                        </tr>
-                        <tr>
-                            <th className="required">Frais de Livraison</th>
-                            <td><input className="required-field" name="deliveryFee" type="number"
-                                       onChange={handleChange}/></td>
-                        </tr>
-                        <tr>
-                            <th className="required">Montant Article</th>
-                            <td><input className="required-field" name="codAmount" type="number"
-                                       onChange={handleChange}/></td>
-                        </tr>
-                        <tr>
-                            <th>Crée le</th>
-                            <td><input type="text" value={commande.createdAt} disabled/></td>
-                        </tr>
-                        <tr>
-                            <th>Mis à Jour le</th>
-                            <td><input type="text" value={commande.updatedAt} disabled/></td>
-                        </tr>
-                        <tr>
-                            <th>Statut</th>
-                            <td>
-                                <input name='status' disabled onChange={handleChange} placeholder='En attente'/>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div className="column">
-                    {commande.pickups.map((pickup, index) => (
-                        <div key={index}>
-                            <div className="section-header">Lieu de Récupération {index + 1}/{commande.pickups.length}
-                                <div className="pickup-header">
-                                    {index + 1 > 1 && <button type="button" className="remove-button"
-                                                              onClick={() => handleRemovePickup(index)}>Supprimer</button>}
-                                </div>
-                            </div>
-                            <table>
-                                <tbody>
-                                <tr>
-                                    <th>Nom Contact</th>
-                                    <td><input type="text" name={`pickups.${index}.contact.name`}
-                                               value={pickup.contact?.name} onChange={handleChange}/></td>
-                                </tr>
-                                <tr>
-                                    <th className="required">Téléphone</th>
-                                    <td><input className="required-field" type="text"
-                                               name={`pickups.${index}.contact.phoneNumber`}
-                                               value={pickup.contact?.phoneNumber} onChange={handleChange}/></td>
-                                </tr>
-                                <tr>
-                                    <th className="required">Adresse</th>
-                                    <td><input className="required-field" type="text"
-                                               name={`pickups.${index}.address.name`} value={pickup.address?.name}
-                                               onChange={handleChange}/></td>
-                                </tr>
-                                <tr>
-                                    <th>Repère</th>
-                                    <td><input type="text" name={`pickups.${index}.address.landmark`}
-                                               value={pickup.address?.landmark} onChange={handleChange}/></td>
-                                </tr>
-                                <tr>
-                                    <th className="required">Ville</th>
-                                    <td>
-                                        <select className="required-field" name={`pickups.${index}.address.city`}
-                                                value={pickup.address?.city} onChange={handleChange}>
-                                            <option value="" disabled>Choisir</option>
-                                            <option value="Cocody">Cocody</option>
-                                            <option value="Marcory">Marcory</option>
-                                            <option value="Yopougon">Yopougon</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th className="required">Taille</th>
-                                    <td>
-                                        <select className="required-field" name={`pickups.${index}.size`}
-                                                value={pickup.size} onChange={handleChange}>
-                                            <option value="" disabled>Choisir</option>
-                                            <option value="S">S</option>
-                                            <option value="M">M</option>
-                                            <option value="L">L</option>
-                                            <option value="XL">XL</option>
-                                            <option value="XXL">XXL</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Poids</th>
-                                    <td><input type="number" name={`pickups.${index}.weight`} value={pickup.weight}
-                                               onChange={handleChange}/></td>
-                                </tr>
-                                <tr>
-                                    <th>Quantité</th>
-                                    <td><input type="number" name={`pickups.${index}.quantity`} value={pickup.quantity}
-                                               onChange={handleChange}/></td>
-                                </tr>
-                                <tr>
-                                    <th>Dimensions</th>
-                                    <td><input type="text" name={`pickups.${index}.dimensions`}
-                                               value={pickup.dimensions} onChange={handleChange}/></td>
-                                </tr>
-                                <tr>
-                                    <th>Description</th>
-                                    <td><input type="text" name={`pickups.${index}.description`}
-                                               value={pickup.description} onChange={handleChange}/></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    ))}
-                    <button type="button" className='btn btn-sm btn-primary' onClick={handleAddPickup}>Ajouter un lieu
-                        de récupération
-                    </button>
-                </div>
-
-                <div className="column">
-                    <div className="section-header">Détails de la Livraison</div>
-                    <table>
-                        <tbody>
-                        <tr>
-                            <th>Nom du contact</th>
-                            <td><input type="text" name="delivery.contact.name" value={commande.delivery.contact.name}
-                                       onChange={handleChange}/></td>
-                        </tr>
-                        <tr>
-                            <th className="required">Téléphone</th>
-                            <td><input className="required-field" type="text" name="delivery.contact.phoneNumber"
-                                       value={commande.delivery.contact.phoneNumber} onChange={handleChange}/></td>
-                        </tr>
-                        <tr>
-                            <th className="required">Adresse</th>
-                            <td><input className="required-field" type="text" name="delivery.address.name"
-                                       value={commande.delivery.address.name} onChange={handleChange}/></td>
-                        </tr>
-                        <tr>
-                            <th>Repère</th>
-                            <td><input type="text" name="delivery.address.landmark"
-                                       value={commande.delivery.address.landmark} onChange={handleChange}/></td>
-                        </tr>
-                        <tr>
-                            <th className="required">Ville</th>
-                            <td>
-                                <select className="required-field" name="delivery.address.city"
-                                        value={commande.delivery.address.city} onChange={handleChange}>
-                                    <option value="" disabled>Choisir</option>
-                                    <option value="Cocody">Cocody</option>
-                                    <option value="Marcory">Marcory</option>
-                                    <option value="Yopougon">Yopougon</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Type</th>
-                            <td><input disabled type="text" name="delivery.type" value='standard'
-                                       onChange={handleChange}/></td>
-                        </tr>
-                        <tr>
-                            <th>Date Limite</th>
-                            <td><input type="date" name="delivery.deadline" value={commande.delivery.deadline}
-                                       onChange={handleChange}/></td>
-                        </tr>
-                        <tr>
-                            <th>Instructions</th>
-                            <td><input type="text" name="delivery.instructions" value={commande.delivery.instructions}
-                                       onChange={handleChange}/></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <div className="">
                 {
-                    commande?.pickups[0]?.photoUrl != null ?
+                    commande?.pickups[0]?.photoUrl ?
                         (
-                            <div className="photo-column">
-                                <div className="section-header">Photo de la Commande</div>
-                                <div className="photo-container">
-                                    <img
-                                        src={commande.pickups[0].photoUrl}
-                                        alt="Photo de la commande"
-                                    />
+                            <div className={"row"}>
+                                <div className="col-md-3">
+                                    <div className="section-header">Informations Générales</div>
+                                    <table>
+                                        <tbody>
+                                        <tr>
+                                            <th># Numéro</th>
+                                            <td><input type="text" placeholder='Automatique' disabled/></td>
+                                        </tr>
+                                        <tr>
+                                            <th className="required">Frais de Livraison</th>
+                                            <td><input className="required-field" name="deliveryFee" type="number"
+                                                       onChange={handleChange}/></td>
+                                        </tr>
+                                        <tr>
+                                            <th className="required">Montant Article</th>
+                                            <td>
+                                                <td><input className="required-field" name="codAmount" type="number"
+                                                           onChange={handleChange}/></td>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Crée le</th>
+                                            <td><input type="text" value={commande.createdAt} disabled/></td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Mis à Jour le</th>
+                                            <td><input type="text" value={commande.updatedAt} disabled/></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Statut</th>
+                                            <td>
+                                                <input name='status' disabled onChange={handleChange}
+                                                       placeholder='En attente'/>
+                                            </td>
+                                        </tr>
+
+                                        </tbody>
+                                    </table>
+
+                                </div>
+
+                                <div className="col-md-3">
+                                    {commande.pickups.map((pickup, index) => (
+                                        <div key={index}>
+                                            <div
+                                                className="section-header d-flex justify-content-between align-items-center">
+                                                <div className="mx-auto">
+                                                    Lieu de Récupération {index + 1}/{commande.pickups.length}
+                                                </div>
+                                                <div className="pickup-header">
+                                                    {
+                                                        index + 1 > 1 &&
+                                                        <button type="button" className="btn btn-danger btn-sm"
+                                                                onClick={() => handleRemovePickup(index)}>Supprimer</button>
+                                                    }
+                                                </div>
+                                            </div>
+                                            <table>
+                                                <tbody>
+                                                <tr>
+                                                    <th>Nom Contact</th>
+                                                    <td><input type="text" name={`pickups.${index}.contact.name`}
+                                                               value={pickup.contact?.name}
+                                                               onChange={handleChange}/></td>
+                                                </tr>
+                                                <tr>
+                                                    <th className="required">Téléphone</th>
+                                                    <td><input className="required-field" type="text"
+                                                               name={`pickups.${index}.contact.phoneNumber`}
+                                                               value={pickup.contact?.phoneNumber}
+                                                               onChange={handleChange}/></td>
+                                                </tr>
+                                                <tr>
+                                                    <th className="required">Adresse</th>
+                                                    <td><input className="required-field" type="text"
+                                                               name={`pickups.${index}.address.name`}
+                                                               value={pickup.address?.name}
+                                                               onChange={handleChange}/></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Repère</th>
+                                                    <td><input type="text"
+                                                               name={`pickups.${index}.address.landmark`}
+                                                               value={pickup.address?.landmark}
+                                                               onChange={handleChange}/></td>
+                                                </tr>
+                                                <tr>
+                                                    <th className="required">Ville</th>
+                                                    <td>
+                                                        <select className="required-field"
+                                                                name={`pickups.${index}.address.city`}
+                                                                value={pickup.address?.city}
+                                                                onChange={handleChange}>
+                                                            <option value="" disabled>Choisir</option>
+                                                            <option value="" disabled> Choisir</option>
+                                                            {citizen.map((ville, index) => (
+                                                                <option key={index}
+                                                                        value={ville.libelle}>{ville.libelle}</option>
+                                                            ))}
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th className="required">Taille</th>
+                                                    <td>
+                                                        <select className="required-field"
+                                                                name={`pickups.${index}.size`}
+                                                                value={pickup.size} onChange={handleChange}>
+                                                            <option value="" disabled>Choisir</option>
+                                                            <option value="S">S</option>
+                                                            <option value="M">M</option>
+                                                            <option value="L">L</option>
+                                                            <option value="XL">XL</option>
+                                                            <option value="XXL">XXL</option>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Poids</th>
+                                                    <td><input type="number" name={`pickups.${index}.weight`}
+                                                               value={pickup.weight}
+                                                               onChange={handleChange}/></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Quantité</th>
+                                                    <td><input type="number" name={`pickups.${index}.quantity`}
+                                                               value={pickup.quantity}
+                                                               onChange={handleChange}/></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Dimensions</th>
+                                                    <td><input type="text" name={`pickups.${index}.dimensions`}
+                                                               value={pickup.dimensions} onChange={handleChange}/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Description</th>
+                                                    <td><input type="text" name={`pickups.${index}.description`}
+                                                               value={pickup.description} onChange={handleChange}/>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    ))}
+                                    <button type="button" className='btn btn-sm btn-primary w-100'
+                                            onClick={handleAddPickup}>Ajouter un
+                                        lieu
+                                        de récupération
+                                    </button>
+                                </div>
+
+                                <div className="col-md-3">
+                                    <div className="section-header">Détails de la Livraison</div>
+                                    <table>
+                                        <tbody>
+
+                                        <tr>
+                                            <th>Nom du contact</th>
+                                            <td><input type="text" name="delivery.contact.name"
+                                                       value={commande.delivery.contact.name}
+                                                       onChange={handleChange}/></td>
+                                        </tr>
+                                        <tr>
+                                            <th className="required">Téléphone</th>
+                                            <td><input className="required-field" type="text"
+                                                       name="delivery.contact.phoneNumber"
+                                                       value={commande.delivery.contact.phoneNumber}
+                                                       onChange={handleChange}/></td>
+                                        </tr>
+                                        <tr>
+                                            <th className="required">Adresse</th>
+                                            <td><input className="required-field" type="text"
+                                                       name="delivery.address.name"
+                                                       value={commande.delivery.address.name}
+                                                       onChange={handleChange}/></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Repère</th>
+                                            <td><input type="text" name="delivery.address.landmark"
+                                                       value={commande.delivery.address.landmark}
+                                                       onChange={handleChange}/></td>
+                                        </tr>
+                                        <tr>
+                                            <th className="required">Ville</th>
+                                            <td>
+                                                <select className="required-field" name="delivery.address.city"
+                                                        value={commande.delivery.address.city}
+                                                        onChange={handleChange}>
+                                                    <option value="" disabled>Choisir</option>
+                                                    {citizen.map((ville) => (
+                                                        <option value={ville.libelle}>{ville.libelle}</option>
+                                                    ))}
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Type</th>
+                                            <td><input disabled type="text" name="delivery.type" value='standard'
+                                                       onChange={handleChange}/></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Date Limite</th>
+                                            <td><input type="date" name="delivery.deadline"
+                                                       value={commande.delivery.deadline}
+                                                       onChange={handleChange}/></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Instructions</th>
+                                            <td><input type="text" name="delivery.instructions"
+                                                       value={commande.delivery.instructions}
+                                                       onChange={handleChange}/></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div className="col-md-3">
+                                    <div className="section-header">Photo de la Commande</div>
+                                    <div className="photo-container">
+                                        <img
+                                            src={commande.pickups[0].photoUrl}
+                                            alt="Photo de la commande"
+                                        />
+                                    </div>
                                 </div>
                             </div>
+
                         ) : (
-                            <div className="photo-column">
-                                <div className="section-header">Photo de la Commande</div>
-                                <div className="photo-container">
-                                    <img
-                                        src='https://i.postimg.cc/1zytFbBp/order-photo-sample.jpg'
-                                        alt="Photo de la commande"
-                                    />
+                            <div className={"row"}>
+                                <div className="col-md-4">
+                                    <div className="section-header">Informations Générales</div>
+                                    <table>
+                                        <tbody>
+                                        <tr>
+                                            <th># Numéro</th>
+                                            <td><input type="text" placeholder='Automatique' disabled/></td>
+                                        </tr>
+                                        <tr>
+                                            <th className="required">Frais de Livraison</th>
+                                            <td><input className="required-field" name="deliveryFee" type="number"
+                                                       onChange={handleChange}/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th className="required">Montant Article</th>
+                                            <td>
+                                                <td><input className="required-field" name="codAmount" type="number"
+                                                           onChange={handleChange}/></td>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Crée le</th>
+                                            <td><input type="text" value={commande.createdAt} disabled/></td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Mis à Jour le</th>
+                                            <td><input type="text" value={commande.updatedAt} disabled/></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Statut</th>
+                                            <td>
+                                                <input name='status' disabled onChange={handleChange}
+                                                       placeholder='En attente'/>
+                                            </td>
+                                        </tr>
+
+                                        </tbody>
+                                    </table>
+
+                                </div>
+
+                                <div className="col-md-4">
+                                    {commande.pickups.map((pickup, index) => (
+                                        <div key={index}>
+                                            <div
+                                                className="section-header d-flex justify-content-between align-items-center">
+                                                <div className="mx-auto">
+                                                    Lieu de Récupération {index + 1}/{commande.pickups.length}
+                                                </div>
+                                                <div className="pickup-header">
+                                                    {
+                                                        index + 1 > 1 &&
+                                                        <button type="button" className="btn btn-danger btn-sm"
+                                                                onClick={() => handleRemovePickup(index)}>Supprimer</button>
+                                                    }
+                                                </div>
+                                            </div>
+                                            <table>
+                                                <tbody>
+                                                <tr>
+                                                    <th>Nom Contact</th>
+                                                    <td><input type="text" name={`pickups.${index}.contact.name`}
+                                                               value={pickup.contact?.name} onChange={handleChange}/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th className="required">Téléphone</th>
+                                                    <td><input className="required-field" type="text"
+                                                               name={`pickups.${index}.contact.phoneNumber`}
+                                                               value={pickup.contact?.phoneNumber}
+                                                               onChange={handleChange}/></td>
+                                                </tr>
+                                                <tr>
+                                                    <th className="required">Adresse</th>
+                                                    <td><input className="required-field" type="text"
+                                                               name={`pickups.${index}.address.name`}
+                                                               value={pickup.address?.name}
+                                                               onChange={handleChange}/></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Repère</th>
+                                                    <td><input type="text" name={`pickups.${index}.address.landmark`}
+                                                               value={pickup.address?.landmark}
+                                                               onChange={handleChange}/></td>
+                                                </tr>
+                                                <tr>
+                                                    <th className="required">Ville</th>
+                                                    <td>
+                                                        <select className="required-field"
+                                                                name={`pickups.${index}.address.city`}
+                                                                value={pickup.address?.city} onChange={handleChange}>
+                                                            <option value="" disabled>Choisir</option>
+                                                            <option value="" disabled> Choisir</option>
+                                                            {citizen.map((ville, index) => (
+                                                                <option key={index}
+                                                                        value={ville.libelle}>{ville.libelle}</option>
+                                                            ))}
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th className="required">Taille</th>
+                                                    <td>
+                                                        <select className="required-field"
+                                                                name={`pickups.${index}.size`}
+                                                                value={pickup.size} onChange={handleChange}>
+                                                            <option value="" disabled>Choisir</option>
+                                                            <option value="S">S</option>
+                                                            <option value="M">M</option>
+                                                            <option value="L">L</option>
+                                                            <option value="XL">XL</option>
+                                                            <option value="XXL">XXL</option>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Poids</th>
+                                                    <td><input type="number" name={`pickups.${index}.weight`}
+                                                               value={pickup.weight}
+                                                               onChange={handleChange}/></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Quantité</th>
+                                                    <td><input type="number" name={`pickups.${index}.quantity`}
+                                                               value={pickup.quantity}
+                                                               onChange={handleChange}/></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Dimensions</th>
+                                                    <td><input type="text" name={`pickups.${index}.dimensions`}
+                                                               value={pickup.dimensions} onChange={handleChange}/></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Description</th>
+                                                    <td><input type="text" name={`pickups.${index}.description`}
+                                                               value={pickup.description} onChange={handleChange}/></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    ))}
+                                    <button type="button" className='btn btn-sm btn-primary w-100'
+                                            onClick={handleAddPickup}>Ajouter un
+                                        lieu
+                                        de récupération
+                                    </button>
+                                </div>
+
+                                <div className="col-md-4">
+                                    <div className="section-header">Détails de la Livraison</div>
+                                    <table>
+                                        <tbody>
+
+                                        <tr>
+                                            <th>Nom du contact</th>
+                                            <td><input type="text" name="delivery.contact.name"
+                                                       value={commande.delivery.contact.name}
+                                                       onChange={handleChange}/></td>
+                                        </tr>
+                                        <tr>
+                                            <th className="required">Téléphone</th>
+                                            <td><input className="required-field" type="text"
+                                                       name="delivery.contact.phoneNumber"
+                                                       value={commande.delivery.contact.phoneNumber}
+                                                       onChange={handleChange}/></td>
+                                        </tr>
+                                        <tr>
+                                            <th className="required">Adresse</th>
+                                            <td><input className="required-field" type="text"
+                                                       name="delivery.address.name"
+                                                       value={commande.delivery.address.name} onChange={handleChange}/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Repère</th>
+                                            <td><input type="text" name="delivery.address.landmark"
+                                                       value={commande.delivery.address.landmark}
+                                                       onChange={handleChange}/></td>
+                                        </tr>
+                                        <tr>
+                                            <th className="required">Ville</th>
+                                            <td>
+                                                <select className="required-field" name="delivery.address.city"
+                                                        value={commande.delivery.address.city} onChange={handleChange}>
+                                                    <option value="" disabled>Choisir</option>
+                                                    {citizen.map((ville) => (
+                                                        <option value={ville.libelle}>{ville.libelle}</option>
+                                                    ))}
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Type</th>
+                                            <td><input disabled type="text" name="delivery.type" value='standard'
+                                                       onChange={handleChange}/></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Date Limite</th>
+                                            <td><input type="date" name="delivery.deadline"
+                                                       value={commande.delivery.deadline}
+                                                       onChange={handleChange}/></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Instructions</th>
+                                            <td><input type="text" name="delivery.instructions"
+                                                       value={commande.delivery.instructions}
+                                                       onChange={handleChange}/></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         )
                 }
             </div>
 
-            {loading && (
-                <div className="sweet-loading" style={{justifyContent: 'center'}}>
-                    <BeatLoader
-                        color={color}
-                        loading={loading}
-                        cssOverride={override}
-                        size={20}
-                        aria-label="Loading Spinner"
-                        data-testid="loader"
-                    />
-                </div>
-            )}
         </div>
+
     );
 };
 

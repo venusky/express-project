@@ -2,6 +2,9 @@ import Nav from "react-bootstrap/Nav";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import './nav.css'
+import './alert.css'
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 function Header(){
 
@@ -32,16 +35,45 @@ function Header(){
     }, []); // Empty dependency array means this effect runs only once
 
     const logout = () => {
-        localStorage.removeItem('token');
-        window.location.href = '/login';
+        confirmAlert({
+            customUI: ({ onClose }) => {
+                return (
+                    <div className='custom-ui'>
+                        <h1>Confirmation</h1>
+                        <p>Êtes-vous sûr de vouloir vous déconnecter ?</p>
+                        <div className="custom-buttons">
+                            <button
+                                onClick={onClose}
+                                className="cancel-button"
+                            >
+                                Non
+                            </button>
+                            <button
+                                onClick={() => {
+                                    localStorage.removeItem('token');
+                                    window.location.href = '/login';
+                                    onClose();
+                                }}
+                                className="confirm-button"
+                            >
+                                Oui
+                            </button>
+                        </div>
+                    </div>
+                );
+            }
+        });
+
+
     };
+
 
     const formatNumber = (number) => {
         return new Intl.NumberFormat('fr-FR').format(number);
     };
 
     return (
-        <header >
+        <header>
             <Nav className="justify-content-center navbar">
                 <Nav.Item>
                     <Nav.Link>
@@ -63,12 +95,12 @@ function Header(){
                         <li className="navbar-link">
                             <a href="/liste-commandes">Commandes</a>
                         </li>
-                        <li className="navbar-link">
+                        {/*<li className="navbar-link">
                             <a href="#">Transactions</a>
                         </li>
                         <li className="navbar-link">
                             <a href="#">Paramètres</a>
-                        </li>
+                        </li>*/}
                         <li className="navbar-link">
                             <a href="#" onClick={logout}>Déconnexion</a>
                         </li>

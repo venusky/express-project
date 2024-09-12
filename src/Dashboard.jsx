@@ -35,8 +35,11 @@ const Dashboard = () => {
     const [startDate, setStartDate] = useState(today); // Initialize with today's date
     const [endDate, setEndDate] = useState('');
 
+    const [token, setToken ] = useState(null);
+
     const fetchData = async () => {
         const token = localStorage.getItem('token')
+        setToken(token)
         try {
             const response = await axios.get('https://api.express.ci/partners/dashboard', {
                 headers: {
@@ -144,11 +147,12 @@ const Dashboard = () => {
 
             const response = await axios.get(url, {
                 headers: {
-                    'Authorization': 'Bearer '+token               
+                    'Authorization': `Bearer ${token}`,
                  }
             });
 
             const orders = response.data.orders;
+            //console.log(orders)
             const deliveryFees = response.data.deliveryFees;
             const codAmounts = response.data.codAmounts;
 
@@ -210,7 +214,7 @@ const Dashboard = () => {
                     onChange={(e) => setEndDate(e.target.value)}
                 />
                 <button className="btn btn-dark filter-button" onClick={handleFilter}>Filtrer</button>
-                <button className="btn btn-outline-dark reset-button" onClick={handleReset}>Afficher tout</button>
+                {/*<button className="btn btn-outline-dark reset-button" onClick={handleReset}>Afficher tout</button>*/}
             </div>
 
             <div className="row g-3">
